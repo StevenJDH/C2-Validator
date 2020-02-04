@@ -51,7 +51,7 @@ namespace C2_Validator
 
                 Console.WriteLine(certDetails);
 
-                if (basicConstraints == null || basicConstraints.Critical == false)
+                if (basicConstraints == null || basicConstraints.CertificateAuthority == false || basicConstraints.Critical == false)
                 {
                     Console.WriteLine("--ISSUE DETECTED--");
                     Console.WriteLine("You will need to regenerate the certificate above before upgrading.\n");
