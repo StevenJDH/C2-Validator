@@ -75,7 +75,7 @@ namespace C2_Validator
         }
 
         /// <summary>
-        /// Get a logo that is generated with author and version information.
+        /// Gets a logo that is generated with author and version information.
         /// </summary>
         /// <returns>Text-based application logo.</returns>
         private static string GetLogo()
@@ -99,15 +99,16 @@ namespace C2_Validator
         private static string GetPortBoundCertThumbprint()
         {
             ICommandable shell = new Shell();
-            var cmdOutput = shell.Run("netsh http show sslcert ipport=0.0.0.0:4242 | findstr Hash");
+            var cmdOutput = shell.Run("netsh http show sslcert ipport=0.0.0.0:4242");
+            var outputLines = cmdOutput.StdOut.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (cmdOutput.ExitCode > 0 || cmdOutput.StdOut.Contains("Hash") == false)
+            if (cmdOutput.ExitCode > 0 || outputLines.Length < 4)
             {
                 throw new StandardErrorException(String.IsNullOrWhiteSpace(cmdOutput.StdErr) ? 
                     "No certificate binding found on port 4242. Make sure you are running this on your Qlik Sense server." : cmdOutput.StdErr);
             }
 
-            return cmdOutput.StdOut.Split(':')[1].Trim();
+            return outputLines[3].Split(':')[1].Trim();
         }
 
         /// <summary>
