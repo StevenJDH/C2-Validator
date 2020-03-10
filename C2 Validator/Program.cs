@@ -41,7 +41,7 @@ namespace C2_Validator
 
                 foreach (var extension in rootCert.Extensions)
                 {
-                    if (extension.Oid.FriendlyName != "Basic Constraints") continue;
+                    if (extension.Oid.Value != "2.5.29.19") continue; // "2.5.29.19" = "Basic Constraints" (.FriendlyName)
 
                     basicConstraints = extension as X509BasicConstraintsExtension;
                     break;
