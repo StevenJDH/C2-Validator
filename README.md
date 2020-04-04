@@ -8,9 +8,19 @@ Releases: [https://github.com/StevenJDH/C2-Validator/releases](https://github.co
 ## Features
 * Checks to see if the internal Qlik Sense Root certificate needs to be regenerated.
 * Displays the certificate name, thumbprint, and Basic Constraints required by Qlik Sense.
+* **New** [Silent Mode](https://github.com/StevenJDH/C2-Validator/wiki/Silent-Mode) to included this tool as part of an automated script.
 
 ## Prerequisites
 * Qlik Sense Enterprise server installed on Windows Server 2012 R2 or newer.
+
+## Command line usage for Silent Mode
+Below is the usage information that is needed to run the tool via the command line in Silent Mode as part of a script. You can still run the tool directly by double-clicking on the executable. See the wiki article [Silent Mode](https://github.com/StevenJDH/C2-Validator/wiki/Silent-Mode) for more information regarding the return codes used by the tool. 
+
+    Usage: C2-Validator_vX.X.X.XXXXX.exe [-s | -?]
+
+    Options:
+      -s, -S         Runs the validator in silent mode for scripting.
+      -?, -h, -H     Displays this usage information.
 
 ## Disclaimer
 C2 Validator is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
