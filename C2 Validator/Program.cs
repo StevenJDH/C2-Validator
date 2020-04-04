@@ -30,9 +30,31 @@ namespace C2_Validator
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            Console.WriteLine(GetLogo());
+            bool isSilentMode = false;
+            int returnCode = 0;
+
+            // Checks command line options being passed.
+            if (args.Length > 0)
+            {
+                if (args[0].Equals("-s", StringComparison.OrdinalIgnoreCase))
+                {
+                    isSilentMode = true;
+                }
+                else if (new[] { "-?", "-h", "-H" }.Any(o => o == args[0]))
+                {
+                    PrintUsageInfo();
+                    return 0;
+                }
+                else
+                {
+                    Console.WriteLine("Error: Invalid command line option provided. Use -? to display usage information.");
+                    return 87;
+                }
+            }
+
+            if (isSilentMode == false) Console.WriteLine(GetLogo());
 
             try
             {
@@ -47,31 +69,42 @@ namespace C2_Validator
                     break;
                 }
 
-                var certDetails = GetCertDetails(rootCert, basicConstraints);
+                bool hasFailedResult = (basicConstraints == null || basicConstraints.CertificateAuthority == false ||
+                                        basicConstraints.Critical == false);
 
-                Console.WriteLine(certDetails);
+                if (isSilentMode)
+                {
+                    return Convert.ToInt32(hasFailedResult);
+                }
 
-                if (basicConstraints == null || basicConstraints.CertificateAuthority == false || basicConstraints.Critical == false)
+                Console.WriteLine(GetCertDetails(rootCert, basicConstraints));
+
+                if (hasFailedResult)
                 {
                     Console.WriteLine("--ISSUE DETECTED--");
-                    Console.WriteLine("You will need to regenerate the certificate above before upgrading.\n");
+                    Console.WriteLine("You will need to regenerate the certificate above before upgrading.");
+                    returnCode = 1;
                 }
                 else
                 {
                     Console.WriteLine("--CHECK PASSED--");
-                    Console.WriteLine("It is safe to upgrade to Qlik Sense February 2020 or newer.\n");
+                    Console.WriteLine("It is safe to upgrade to Qlik Sense February 2020 or newer.");
+                    returnCode = 0;
                 }
             }
             catch (NullReferenceException)
             {
-                Console.WriteLine("Error: Certificate bound to port 4242 was not found in the 'Local Machine/Personal' store.\n");
+                Console.WriteLine("Error: Certificate bound to port 4242 was not found in the 'Local Machine/Personal' store.");
+                returnCode = 4316;
             }
             catch (Exception ex) when(ex is CryptographicException || ex is StandardErrorException)
             {
-                Console.WriteLine($"Error: {ex.Message}\n");
+                Console.WriteLine($"Error: {ex.Message}");
+                returnCode = 10;
             }
 
-            PauseConsoleForExit();
+            if (isSilentMode == false) PauseConsoleForExit();
+            return returnCode;
         }
 
         /// <summary>
@@ -162,9 +195,26 @@ namespace C2_Validator
         /// </summary>
         private static void PauseConsoleForExit()
         {
-            Console.Write("Press any key to exit . . .");
+            Console.Write("\nPress any key to exit . . .");
             Console.ReadKey(intercept: true); //Pause before closing workaround.
             Console.WriteLine("\n");
+        }
+
+        /// <summary>
+        /// Displays usage information for the application.
+        /// </summary>
+        private static void PrintUsageInfo()
+        {
+            var sb = new StringBuilder();
+            var appName = System.AppDomain.CurrentDomain.FriendlyName;
+
+            sb.AppendLine($"Usage: {(appName.Contains(' ') ? "\"" + appName + "\"" : appName)} [-s | -?]\n");
+            sb.AppendLine("Options:");
+            sb.AppendLine("  -s, -S \t Runs the validator in silent mode for scripting.");
+            sb.AppendLine("  -?, -h, -H \t Displays this usage information.");
+
+            Console.WriteLine(GetLogo());
+            Console.WriteLine(sb.ToString());
         }
     }
 }
