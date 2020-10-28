@@ -1,4 +1,9 @@
 # C2 Validator (Certificate Constraint Validator)
+
+![GitHub All Releases](https://img.shields.io/github/downloads/StevenJDH/C2-Validator/total)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/StevenJDH/C2-Validator?include_prereleases)
+![GitHub](https://img.shields.io/github/license/StevenJDH/C2-Validator)
+
 Starting with Qlik Sense February 2020, the node.js component that has been updated in this release will now enforce certain security checks in a certificate's Basic Constraints. If a Qlik Sense installation existed before June 2019 at any time, then those needed constraints are not present nor are they added when upgrading since the Qlik Sense installer does not upgrade certificates. New installations that were installed with Qlik Sense June 2019 or later are not affected. C2 Validator is a one click solution to quickly determine if the current installation is affected by this change for situations where the IT team cannot remember what the initial installation version was or as a preventative measure when upgrading. More information can be found here [https://support.qlik.com/articles/000094782](https://support.qlik.com/articles/000094782).
 
 ![C2 Validator screenshot](c2-validator-ss.jpg "Screenshot")
@@ -8,7 +13,7 @@ Releases: [https://github.com/StevenJDH/C2-Validator/releases](https://github.co
 ## Features
 * Checks to see if the internal Qlik Sense Root certificate needs to be regenerated.
 * Displays the certificate name, thumbprint, and Basic Constraints required by Qlik Sense.
-* **New** [Silent Mode](https://github.com/StevenJDH/C2-Validator/wiki/Silent-Mode) to included this tool as part of an automated script.
+* **New** [Silent Mode](https://github.com/StevenJDH/C2-Validator/wiki/Silent-Mode) to include this tool as part of an automated script.
 
 ## Prerequisites
 * Qlik Sense Enterprise server installed on Windows Server 2012 R2 or newer.
@@ -28,9 +33,6 @@ C2 Validator is distributed in the hope that it will be useful, but WITHOUT ANY 
 ## Do you have any questions?
 Many commonly asked questions are answered in the FAQ:
 [https://github.com/StevenJDH/C2-Validator/wiki/FAQ](https://github.com/StevenJDH/C2-Validator/wiki/FAQ)
-
-## Need to contact me?
-I can be reached here directly at [https://21.co/stevenjdh](https://21.co/stevenjdh "Contact Page")
 
 ## Want to show your support?
 
